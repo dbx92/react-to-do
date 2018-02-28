@@ -11,7 +11,7 @@ class App extends Component {
          { description: 'Throw the dishes away', isCompleted: false },
          { description: 'Buy new dishes', isCompleted: false }
        ],
-       newToDoDescription: ' '
+       newToDoDescription: ''
      };
   }
  handleChange(e){
@@ -23,26 +23,32 @@ handleSubmit(e) {
   const newTodo = {description: this.state.newToDoDescription, isCompleted: false};
   this.setState({todos:[...this.state.todos, newTodo], newToDoDescription: ' '});
 }
-
+deleteToDo(id) {
+  console.log('delete button clicked');
+   let todos = this.state.todos;
+   let index = todos.findIndex(x => x.id === id);
+   todos.splice(index,1);
+   this.setState({todos:todos});
+}
 toggleComplete(index){
   const todos = this.state.todos.slice();
   const todo = todos[index];
   todo.isCompleted = todo.isCompleted ? false : true;
   this.setState({todos:todos});
-} /*can i {todos:delte} and not have a button for usefullness?*/
+}
   render() {
     return (
       <div className="App">
         <ul>
           {this.state.todos.map( (todo,index) =>
-            <ToDo key={index} description={todo.description} isCompleted={todo.isCompleted} toggleComplete={ () => this.toggleComplete(index)} />
+            <ToDo key={index} description={todo.description} isCompleted={todo.isCompleted} toggleComplete={ () => this.toggleComplete(index)} deleteToDo = { () => this.deleteToDo(index)} />
           )}
         </ul>
         <form onSubmit={ (e) => this.handleSubmit(e) }>
             <input type="text" value={this.state.newToDoDescription} onChange={ (e) => this.handleChange(e)} />
             <input type="submit" />
         </form>
-        <button type="checkbox" onClick={deleteToDo()}>delete</button>
+
       </div>
     );
   }
